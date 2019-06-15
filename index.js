@@ -27,15 +27,16 @@ const dispatcher = async (event) => {
       let result = await Request(
         "https://reverse.geocoder.api.here.com/6.2/reversegeocode.json",{
           qs: {
-            "app_id": `${process.env.APP_ID}`,
-            "app_code":`${process.env.APP_CODE}`,
+            "app_id": process.env.APP_ID,
+            "app_code": process.env.APP_CODE,
             "mode":"retrieveAddresses",
             "prox": `${slots.Latitude}, ${slots.Longitude}`
-
-          }
-        }
-        
-      )
+          },
+          json: true
+        }   
+      );
+      response.dialogAction.fulfillmentState = "Fulfilled",
+      response.dialogAction.message.content = result.Response.View[0].Result[0].Location.Address.Label;
       break;
     default:
       response.dialogAction.fulfillmentState = "Failed";

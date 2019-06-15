@@ -4,7 +4,7 @@ import Request from 'request-promise';
 //--LAMBDA FUNCTION
 //-----------------------------------------------------
 
-const dispatcher = (event) => {
+const dispatcher = async (event) => {
   let response = {
     sessionAttributes: event.sessionAttributes,
     dialogAction: {
@@ -32,5 +32,5 @@ const dispatcher = (event) => {
 }
 
 exports.handler = (event) => {
-  return dispatcher;
+  return dispatcher(event);
 }

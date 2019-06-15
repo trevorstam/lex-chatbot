@@ -1,4 +1,5 @@
-import Request from 'request-promise';
+import Request from "request-promise";
+require('dotenv').config();
 
 //-----------------------------------------------------
 //--LAMBDA FUNCTION
@@ -8,24 +9,37 @@ const dispatcher = async (event) => {
   let response = {
     sessionAttributes: event.sessionAttributes,
     dialogAction: {
-      type: 'Close',
-      fulfillmentState: '',
+      type: "Close",
+      fulfillmentState: "",
       message: {
-        'contentType': 'PlainText',
-        'content': ''
+        "contentType": "PlainText",
+        "content": ""
       }
     }
   };
   switch(event.currentIntent.name){
-    case 'AboutIntent':
-      response.dialogAction.fulfillmentState = 'Fulfilled';
-      response.dialogAction.message.content = 'Created by Trevor Stam';
+    case "AboutIntent":
+      response.dialogAction.fulfillmentState = "Fulfilled";
+      response.dialogAction.message.content = "Created by Trevor Stam";
       break;
-    case 'LatLngIntent':
+    case "LatLngIntent":
+      let slots = event.currentIntent.slots;
+      let result = await Request(
+        "https://reverse.geocoder.api.here.com/6.2/reversegeocode.json",{
+          qs: {
+            "app_id": `${process.env.APP_ID}`,
+            "app_code":`${process.env.APP_CODE}`,
+            "mode":"retrieveAddresses",
+            "prox": `${slots.Latitude}, ${slots.Longitude}`
+
+          }
+        }
+        
+      )
       break;
     default:
-      response.dialogAction.fulfillmentState = 'Failed';
-      response.dialogAction.message.content = 'Please rephrase';
+      response.dialogAction.fulfillmentState = "Failed";
+      response.dialogAction.message.content = "Please rephrase";
       break;
   }
   return response;

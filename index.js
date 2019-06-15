@@ -17,7 +17,7 @@ const dispatcher = async (event) => {
     }
   };
   switch(event.currentIntent.name){
-    case 'AboutBotIntent':
+    case 'AboutIntent':
       response.dialogAction.fulfillmentState = 'Fulfilled';
       response.dialogAction.message.content = 'Created by Trevor Stam';
       break;
